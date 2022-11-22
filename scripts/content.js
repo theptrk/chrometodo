@@ -26,17 +26,17 @@ TIMESHIDDEN = 0;
 //     input:#todobud_input
 //     button:#save_button
 //   button:#close_button
+// let value = "What is your intent?";
+// chrome.storage.sync.set({ current_todo: value }, function () {
+//   if (chrome.runtime.lastError) {
+//     console.log("Error setting");
+//   }
+//   console.log("Value is set to " + value);
+// });
 
 window.onload = function () {
   // wip: store data in local storage
   // new a form field in new tab
-  let value = "What is your intent?";
-  chrome.storage.sync.set({ current_todo: value }, function () {
-    if (chrome.runtime.lastError) {
-      console.log("Error setting");
-    }
-    console.log("Value is set to " + value);
-  });
 
   const BODY = document.getElementsByTagName("body")[0];
   BODY.insertAdjacentElement("beforebegin", newDiv);
@@ -121,7 +121,10 @@ function getAndSetTodo() {
     if (chrome.runtime.lastError) {
       console.log("Error setting");
     }
-    const current_todo = result.current_todo;
+    let current_todo = result.current_todo;
+    if (current_todo.length === 0) {
+      current_todo = "What is your intent?";
+    }
     const todobud_content = `
     <div>
       <div id="todobud_current_todo"

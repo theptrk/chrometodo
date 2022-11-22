@@ -26,6 +26,7 @@ TIMESHIDDEN = 0;
 //     input:#todobud_input
 //     button:#save_button
 //   button:#close_button
+
 // let value = "What is your intent?";
 // chrome.storage.sync.set({ current_todo: value }, function () {
 //   if (chrome.runtime.lastError) {

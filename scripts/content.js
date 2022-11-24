@@ -59,6 +59,9 @@ function getSnoozeTimeElapsed(snoozeFrom) {
 
 window.onload = function () {
   chrome.storage.sync.get("options", (data) => {
+    if (chrome.runtime.lastError) {
+      console.log("Error setting");
+    }
     const snoozeFrom = data.options.snoozeFrom;
     let shouldSnooze = data.options.snoozeFrom !== undefined;
 
@@ -182,11 +185,11 @@ function getAndSetTodo() {
           </button>
         </span>
         <button id="close_button" style='
-          appearance: none; background-color: #d1d1d1; border: 1px solid rgba(27, 31, 35, 0.15);
+          appearance: none; background-color: #e7e7e7; border: 1px solid rgba(27, 31, 35, 0.15);
           border-radius: 6px; box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
           box-sizing: border-box; color: #24292E; cursor: pointer; display: inline-block;
           font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-          font-size: 10px; font-weight: 500; line-height: 8px; list-style: none; padding: 4px 3px;
+          font-size: 10px; line-height: 8px; list-style: none; padding: 4px 3px;
           position: relative; transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
           user-select: none; -webkit-user-select: none; touch-action: manipulation; vertical-align: middle;
           white-space: nowrap; word-wrap: break-word; margin-right:5px !important;'>

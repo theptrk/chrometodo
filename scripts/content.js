@@ -35,10 +35,50 @@ TIMESHIDDEN = 0;
 //   console.log("Value is set to " + value);
 // });
 
-window.onload = function () {
-  // wip: store data in local storage
-  // new a form field in new tab
+// TODO: refactor: this is copied
+function getSnoozeTimeElapsed(snoozeFrom) {
+  let nowTime = new Date().getTime();
+  let snoozeFromTime = new Date(snoozeFrom);
+  let timeSinceSnoozeMs = nowTime - snoozeFromTime;
+  let snoozeTimeMs = 8 * 1000 * 60 * 60;
 
+  let snoozeTimeElapsed = timeSinceSnoozeMs >= snoozeTimeMs;
+  if (snoozeTimeElapsed) {
+    return true, undefined;
+  }
+
+  let timeLeftMs = snoozeTimeMs - timeSinceSnoozeMs;
+  let hoursLeft = Math.floor(timeLeftMs / (1000 * 60 * 60));
+  let remaining = timeLeftMs - hoursLeft * 1000 * 60 * 60;
+  let minutesLeft = Math.floor(remaining / (1000 * 60));
+
+  let timeLeftTxt = `Snoozed for ${hoursLeft}h and ${minutesLeft}m.`;
+
+  return false, timeLeftTxt;
+}
+
+window.onload = function () {
+  chrome.storage.sync.get("options", (data) => {
+    const snoozeFrom = data.options.snoozeFrom;
+    let shouldSnooze = data.options.snoozeFrom !== undefined;
+
+    if (snoozeFrom === undefined) {
+      init();
+      return;
+    }
+
+    let snoozeTimeElapsed,
+      _ = getSnoozeTimeElapsed(snoozeFrom);
+
+    if (!snoozeTimeElapsed) {
+      shouldSnooze = false;
+      return;
+    }
+    init();
+  });
+};
+
+function init() {
   const BODY = document.getElementsByTagName("body")[0];
   BODY.insertAdjacentElement("beforebegin", newDiv);
   addMarginToBody();
@@ -76,7 +116,7 @@ window.onload = function () {
       saveInput(event);
     }
   });
-};
+}
 
 function saveInput() {
   el = document.getElementById("todobud_input");

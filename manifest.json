@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Focus Bar by TodoBud",
-  "description": "Write your intention and follow through",
+  "name": "Focus Bar",
+  "description": "Start with your intention. Write your intention and follow through at every tab",
   "version": "1.1",
   "action": {
     "default_popup": "src/hello.html",

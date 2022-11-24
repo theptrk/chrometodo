@@ -1,15 +1,16 @@
 <html>
   <body>
-    <h1>Hello Extensions</h1>
-    <h1>Hello Extensions</h1>
-    <h1>Hello Extensions</h1>
-    <h1>Hello Extensions</h1>
+    <div style="min-width:200px">
+      <h1>TodoBud Focus</h1>
+      <form id="todobud_options_form">
+        <label for="snooze">
+          <input type="checkbox" name="snooze" id="todobud_snooze_input">
+          Snooze for 8 hours
+        </label>
+        <br/>
+        <span id="todobud_snooze_hint"></span>
+      </form>
+    </div>
   </body>
   <script src="popup.js"></script>
-  <form id="optionsForm">
-    <label for="debug">
-      <input type="checkbox" name="debug" id="debug">
-      Enable debug mode
-    </label>
-  </form>
 </html>

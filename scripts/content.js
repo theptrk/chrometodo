@@ -111,7 +111,7 @@ function getElementById(id) {
 
 function addMarginToBody() {
   const BODY = document.getElementsByTagName("body")[0];
-  BODY.style.marginTop = "40px";
+  BODY.style.marginTop = "43px";
 }
 function deleteMarginFromBody() {
   const BODY = document.getElementsByTagName("body")[0];

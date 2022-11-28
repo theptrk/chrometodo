@@ -178,7 +178,8 @@ function getAndSetTodo() {
         <span style="margin-left:5px">Focus 🎯</span>
         <span id="todobud_current_todo_text" style="cursor:text">${current_todo}</span>
         <span id="todobud_input_container" style="display:none;">
-          <input type="text" id="todobud_input" style="color:black;cursor:text;background-color:field" value="${current_todo}">
+          <input type="text" id="todobud_input" style="color:black;cursor:text;background-color:field;
+            margin-bottom:0px" value="${current_todo}">
           <button id="save_button" style="margin-right:5px;font-size:14px;color:black;line-height:normal;
             background-color:#eee;border-style:outset;border-width:2px;height:22px;padding:0px 2px">
             save

@@ -62,8 +62,8 @@ window.onload = function () {
     if (chrome.runtime.lastError) {
       console.log("Error setting");
     }
-    const snoozeFrom = data.options.snoozeFrom;
-    let shouldSnooze = data.options.snoozeFrom !== undefined;
+    const snoozeFrom = data.options?.snoozeFrom;
+    let shouldSnooze = snoozeFrom !== undefined;
 
     if (snoozeFrom === undefined) {
       init();
@@ -166,7 +166,7 @@ function getAndSetTodo() {
     if (chrome.runtime.lastError) {
       console.log("Error setting");
     }
-    let current_todo = result.current_todo;
+    let current_todo = result.current_todo ?? "";
     if (current_todo.length === 0) {
       current_todo = "What is your intent?";
     }

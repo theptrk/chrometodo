@@ -17,8 +17,6 @@ innerDiv.style.cssText += "color:black;";
 innerDiv.style.cssText += "cursor:n-resize;";
 newDiv.appendChild(innerDiv);
 
-TIMESHIDDEN = 0;
-
 // div:#todobud_current_todo
 //   span:
 //   span:#todobud_current_todo_text
@@ -26,14 +24,6 @@ TIMESHIDDEN = 0;
 //     input:#todobud_input
 //     button:#save_button
 //   button:#close_button
-
-// let value = "What is your intent?";
-// chrome.storage.sync.set({ current_todo: value }, function () {
-//   if (chrome.runtime.lastError) {
-//     console.log("Error setting");
-//   }
-//   console.log("Value is set to " + value);
-// });
 
 // TODO: refactor: this is copied
 function getSnoozeTimeElapsed(snoozeFrom) {
@@ -144,8 +134,7 @@ function todobud_tmp_hide() {
   setTimeout(() => {
     addMarginToBody();
     bar.style.display = "block";
-  }, 3000 + TIMESHIDDEN * 2000);
-  TIMESHIDDEN += 1;
+  }, 8000);
 }
 
 function getElementById(id) {

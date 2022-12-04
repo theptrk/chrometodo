@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Focus Bar",
-  "description": "Start with your intention. Write your intention in the focus bar and it will remind you at every tab",
+  "description": "The bar starts with the question: 'What is your intent?' Write your intention it will remind you at every tab",
   "version": "2.0.0.1",
   "action": {
     "default_popup": "src/hello.html",

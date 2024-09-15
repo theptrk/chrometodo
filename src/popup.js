@@ -1,70 +1,91 @@
-// main
-populateSnoozeValue();
-
-document
-  .getElementById("todobud_options_form")
-  .addEventListener("change", (event) => {
-    shouldSnooze = Boolean(event.target.checked);
-    handleSnoozeCheckChange(shouldSnooze);
-  });
-
-// In-page cache of the user's options
-const options = {
-  // snoozeFrom = Date
-};
-
-function getSnoozeTimeElapsed(snoozeFrom) {
+function isSnoozeTimeElapsed(snoozeTo) {
   let nowTime = new Date().getTime();
-  let snoozeFromTime = new Date(snoozeFrom);
-  let timeSinceSnoozeMs = nowTime - snoozeFromTime;
-  let snoozeTimeMs = 8 * 1000 * 60 * 60;
+  let snoozeToTime = new Date(snoozeTo).getTime();
+  return nowTime >= snoozeToTime;
+}
 
-  let snoozeTimeElapsed = timeSinceSnoozeMs >= snoozeTimeMs;
-  if (snoozeTimeElapsed) {
-    return true, undefined;
+function getReadableTimeLeft(snoozeTo) {
+  let nowTime = new Date().getTime();
+  let snoozeToTime = new Date(snoozeTo).getTime();
+  let timeLeftMs = snoozeToTime - nowTime;
+
+  if (timeLeftMs <= 0) {
+    return undefined;
   }
 
-  let timeLeftMs = snoozeTimeMs - timeSinceSnoozeMs;
   let hoursLeft = Math.floor(timeLeftMs / (1000 * 60 * 60));
   let remaining = timeLeftMs - hoursLeft * 1000 * 60 * 60;
   let minutesLeft = Math.floor(remaining / (1000 * 60));
 
-  let timeLeftTxt = `Snoozed for ${hoursLeft}h and ${minutesLeft}m.`;
-
-  return false, timeLeftTxt;
+  return `Remaining snooze: ${hoursLeft}h ${minutesLeft}m.`;
 }
 
-function populateSnoozeValue() {
-  // Initialize the form with the user's option settings
-  chrome.storage.sync.get("options", (data) => {
-    const snoozeFrom = data.options.snoozeFrom;
-    let shouldSnooze = data.options.snoozeFrom !== undefined;
+// Helper functions using native promises
+function getOptions() {
+  return chrome.storage.sync.get("options").then((data) => data.options || {});
+}
 
-    if (snoozeFrom === undefined) {
+function setOptions(options) {
+  return chrome.storage.sync.set({ options });
+}
+
+async function populateSnoozeValue() {
+  try {
+    const options = await getOptions();
+    const snoozeTo = options.snoozeTo;
+    let isSnoozeActive = snoozeTo !== undefined;
+
+    if (snoozeTo === undefined) {
       document.getElementById("todobud_snooze_hint").innerHTML = "";
+      document.getElementById("todobud_snooze_input").checked = false;
       return;
     }
 
-    let snoozeTimeElapsed,
-      timeLeftTxt = getSnoozeTimeElapsed(snoozeFrom);
-
-    if (snoozeTimeElapsed) {
-      shouldSnooze = false;
+    if (isSnoozeTimeElapsed(snoozeTo)) {
+      isSnoozeActive = false;
+      document.getElementById("todobud_snooze_hint").innerHTML = "";
     } else {
+      const timeLeftTxt = getReadableTimeLeft(snoozeTo);
       document.getElementById("todobud_snooze_hint").innerHTML = timeLeftTxt;
     }
 
-    document.getElementById("todobud_snooze_input").checked = shouldSnooze;
-  });
+    document.getElementById("todobud_snooze_input").checked = isSnoozeActive;
+  } catch (error) {
+    console.error("Error populating snooze value:", error);
+  }
 }
 
-function handleSnoozeCheckChange(checked) {
-  if (checked) {
-    let now = new Date().getTime();
-    options.snoozeFrom = now;
-  } else {
-    options.snoozeFrom = undefined;
-  }
-  chrome.storage.sync.set({ options });
-  populateSnoozeValue();
+function getSnoozeToTime8Hours() {
+  let now = new Date();
+  let snoozeTo = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+  return snoozeTo.getTime();
 }
+
+async function handleSnoozeCheckChange(checked) {
+  try {
+    const options = await getOptions();
+    if (checked) {
+      options.snoozeTo = getSnoozeToTime8Hours();
+    } else {
+      options.snoozeTo = undefined;
+    }
+    await setOptions(options);
+    await populateSnoozeValue();
+  } catch (error) {
+    console.error("Error handling snooze check change:", error);
+  }
+}
+
+// Main function
+async function main() {
+  await populateSnoozeValue();
+
+  document
+    .getElementById("todobud_options_form")
+    .addEventListener("change", async (event) => {
+      const shouldSnooze = Boolean(event.target.checked);
+      await handleSnoozeCheckChange(shouldSnooze);
+    });
+}
+
+main().catch((error) => console.error("Error in main:", error));

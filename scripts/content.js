@@ -159,32 +159,75 @@ function getAndSetTodo() {
     if (current_todo.length === 0) {
       current_todo = "What is your intent?";
     }
-    const todobud_content = `
-    <div>
-      <div id="todobud_current_todo"
-        style="display:flex;align-items:center;
-          justify-content:space-between;height:40px;font-size:16pt;color:#e8eaed">
+    const todobud_content = /*html*/ ` <div>
+      <style>
+        #todobud_input_container {
+          display: none;
+        }
+        #todobud_current_todo_text {
+          cursor: text;
+        }
+        #todobud_input_container input {
+          background-color: white;
+          color: black;
+          cursor: text;
+          margin-bottom: 0px;
+        }
+        #todobud_current_todo_container {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 40px;
+          font-size: 16pt;
+          color: #e8eaed;
+        }
+        #todobud_input_container #save_button {
+          margin-right: 5px;
+          font-size: 14px;
+          color: black;
+          line-height: normal;
+          background-color: #eee;
+          border-style: outset;
+          border-width: 2px;
+          height: 22px;
+          padding: 0px 2px;
+        }
+        #todobud_current_todo_container #close_button {
+          appearance: none;
+          background-color: #e7e7e7;
+          border: 1px solid rgba(27, 31, 35, 0.15);
+          border-radius: 6px;
+          box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0,
+            rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+          box-sizing: border-box;
+          color: #24292e;
+          cursor: pointer;
+          display: inline-block;
+          font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
+            sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+          font-size: 10px;
+          line-height: 8px;
+          list-style: none;
+          padding: 4px 3px;
+          position: relative;
+          transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+          user-select: none;
+          -webkit-user-select: none;
+          touch-action: manipulation;
+          vertical-align: middle;
+          white-space: nowrap;
+          word-wrap: break-word;
+          margin-right: 5px !important;
+        }
+      </style>
+      <div id="todobud_current_todo_container">
         <span style="margin-left:5px">Focus 🎯</span>
-        <span id="todobud_current_todo_text" style="cursor:text">${current_todo}</span>
-        <span id="todobud_input_container" style="display:none;">
-          <input type="text" id="todobud_input" style="color:black;cursor:text;background-color:field;
-            margin-bottom:0px" value="${current_todo}">
-          <button id="save_button" style="margin-right:5px;font-size:14px;color:black;line-height:normal;
-            background-color:#eee;border-style:outset;border-width:2px;height:22px;padding:0px 2px">
-            save
-          </button>
+        <span id="todobud_current_todo_text">${current_todo}</span>
+        <span id="todobud_input_container">
+          <input type="text" id="todobud_input" value="${current_todo}" />
+          <button id="save_button">save</button>
         </span>
-        <button id="close_button" style='
-          appearance: none; background-color: #e7e7e7; border: 1px solid rgba(27, 31, 35, 0.15);
-          border-radius: 6px; box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
-          box-sizing: border-box; color: #24292E; cursor: pointer; display: inline-block;
-          font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-          font-size: 10px; line-height: 8px; list-style: none; padding: 4px 3px;
-          position: relative; transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
-          user-select: none; -webkit-user-select: none; touch-action: manipulation; vertical-align: middle;
-          white-space: nowrap; word-wrap: break-word; margin-right:5px !important;'>
-          close
-        </button>
+        <button id="close_button">close</button>
       </div>
     </div>`;
     const template = todobud_content;

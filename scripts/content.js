@@ -26,25 +26,12 @@ newDiv.appendChild(innerDiv);
 //   button:#close_button
 
 // TODO: refactor: this is copied
-function getSnoozeTimeElapsed(snoozeFrom) {
+function getSnoozeTimeElapsed(snoozeTo) {
   let nowTime = new Date().getTime();
-  let snoozeFromTime = new Date(snoozeFrom);
-  let timeSinceSnoozeMs = nowTime - snoozeFromTime;
-  let snoozeTimeMs = 8 * 1000 * 60 * 60;
-
-  let snoozeTimeElapsed = timeSinceSnoozeMs >= snoozeTimeMs;
-  if (snoozeTimeElapsed) {
-    return true, undefined;
-  }
-
-  let timeLeftMs = snoozeTimeMs - timeSinceSnoozeMs;
-  let hoursLeft = Math.floor(timeLeftMs / (1000 * 60 * 60));
-  let remaining = timeLeftMs - hoursLeft * 1000 * 60 * 60;
-  let minutesLeft = Math.floor(remaining / (1000 * 60));
-
-  let timeLeftTxt = `Snoozed for ${hoursLeft}h and ${minutesLeft}m.`;
-
-  return false, timeLeftTxt;
+  let snoozeToTime = new Date(snoozeTo);
+  let timeSinceSnoozeMs = snoozeToTime - nowTime;
+  let snoozeTimeElapsed = timeSinceSnoozeMs <= 0;
+  return snoozeTimeElapsed;
 }
 
 window.onload = function () {
@@ -52,22 +39,18 @@ window.onload = function () {
     if (chrome.runtime.lastError) {
       console.log("Error setting");
     }
-    const snoozeFrom = data.options?.snoozeFrom;
-    let shouldSnooze = snoozeFrom !== undefined;
+    const snoozeTo = data.options?.snoozeTo;
 
-    if (snoozeFrom === undefined) {
+    if (snoozeTo === undefined) {
       init();
       return;
     }
 
-    let snoozeTimeElapsed,
-      _ = getSnoozeTimeElapsed(snoozeFrom);
+    let snoozeTimeElapsed = getSnoozeTimeElapsed(snoozeTo);
 
-    if (!snoozeTimeElapsed) {
-      shouldSnooze = false;
-      return;
+    if (snoozeTimeElapsed) {
+      init();
     }
-    init();
   });
 };
 
